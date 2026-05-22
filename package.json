@@ -86,7 +86,31 @@
     "defaultEnabled": true,
     "defaultOptions": {
       "enableSiteMap": true,
-      "enableRSS": true
+      "enableRSS": true,
+      "rssLimit": 10,
+      "rssFullHtml": false,
+      "rssSlug": "index",
+      "includeEmptyFiles": true
+    },
+    "optionSchema": {
+      "enableSiteMap": {
+        "type": "boolean"
+      },
+      "enableRSS": {
+        "type": "boolean"
+      },
+      "rssLimit": {
+        "type": "number"
+      },
+      "rssFullHtml": {
+        "type": "boolean"
+      },
+      "rssSlug": {
+        "type": "string"
+      },
+      "includeEmptyFiles": {
+        "type": "boolean"
+      }
     }
   },
   "engines": {
