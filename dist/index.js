@@ -2247,6 +2247,15 @@ function all(parent) {
 }
 
 // src/emitter.ts
+function normalizeType(raw2) {
+  const value = Array.isArray(raw2) ? raw2[0] : raw2;
+  if (typeof value !== "string") return void 0;
+  let text2 = value.trim();
+  const wikilink = text2.match(/^\[\[([^\]]+)\]\]$/);
+  if (wikilink?.[1]) text2 = wikilink[1];
+  const target = text2.replace(/[|#].*$/, "").trim();
+  return target ? target.toLowerCase().replace(/\s+/g, "-") : void 0;
+}
 var defaultOptions = {
   enableSiteMap: true,
   enableRSS: true,
@@ -2327,6 +2336,7 @@ var ContentIndex = (opts) => {
           title: frontmatter.title ?? "",
           links: data.links ?? [],
           tags: frontmatter.tags ?? [],
+          type: normalizeType(frontmatter.type),
           content: text2 ?? "",
           richContent: options.rssFullHtml && !isEncrypted ? escapeHTML(toHtml(tree, { allowDangerousHtml: true })) : void 0,
           date,

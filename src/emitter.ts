@@ -23,11 +23,24 @@ export type ContentDetails = {
   title: string;
   links: SimpleSlug[];
   tags: string[];
+  /** Normalized `type` frontmatter slug (e.g. "[[Coffee Beans]]" → "coffee-beans"). */
+  type?: string;
   content: string;
   richContent?: string;
   date?: Date;
   description?: string;
 };
+
+/** Normalize a frontmatter `type` (wikilink/string/list) to a slug, or undefined. */
+function normalizeType(raw: unknown): string | undefined {
+  const value = Array.isArray(raw) ? raw[0] : raw;
+  if (typeof value !== "string") return undefined;
+  let text = value.trim();
+  const wikilink = text.match(/^\[\[([^\]]+)\]\]$/);
+  if (wikilink?.[1]) text = wikilink[1];
+  const target = text.replace(/[|#].*$/, "").trim();
+  return target ? target.toLowerCase().replace(/\s+/g, "-") : undefined;
+}
 
 interface Options {
   enableSiteMap: boolean;
@@ -148,6 +161,7 @@ export const ContentIndex: QuartzEmitterPlugin<Partial<Options>> = (opts) => {
           title: (frontmatter.title as string) ?? "",
           links: (data.links as SimpleSlug[] | undefined) ?? [],
           tags: (frontmatter.tags as string[] | undefined) ?? [],
+          type: normalizeType(frontmatter.type),
           content: text ?? "",
           richContent:
             options.rssFullHtml && !isEncrypted

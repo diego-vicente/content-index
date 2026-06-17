@@ -8,6 +8,8 @@ type ContentDetails = {
     title: string;
     links: SimpleSlug[];
     tags: string[];
+    /** Normalized `type` frontmatter slug (e.g. "[[Coffee Beans]]" → "coffee-beans"). */
+    type?: string;
     content: string;
     richContent?: string;
     date?: Date;
